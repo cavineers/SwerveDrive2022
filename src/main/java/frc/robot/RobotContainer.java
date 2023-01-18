@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class RobotContainer {
 
-    
-
     private Joystick m_joy = new Joystick(OIConstants.kDriverJoystickPort);
 
     public POVButton m_povUp = new POVButton(m_joy, 0, 0);
