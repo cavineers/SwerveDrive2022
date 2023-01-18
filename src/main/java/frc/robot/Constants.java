@@ -20,15 +20,15 @@ public final class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static final int kFrontLeftDriveMotorPort = 8;
-        public static final int kBackLeftDriveMotorPort = 2;
-        public static final int kFrontRightDriveMotorPort = 6;
-        public static final int kBackRightDriveMotorPort = 4;
+        public static final int kFrontLeftDriveCanID = 8;
+        public static final int kBackLeftDriveCanID = 2;
+        public static final int kFrontRightDriveCanID = 6;
+        public static final int kBackRightDriveCanID = 4;
 
-        public static final int kFrontLeftTurningMotorPort = 7;
-        public static final int kBackLeftTurningMotorPort = 1;
-        public static final int kFrontRightTurningMotorPort = 5;
-        public static final int kBackRightTurningMotorPort = 3;
+        public static final int kFrontLeftTurningCanID = 7;
+        public static final int kBackLeftTurningCanID = 1;
+        public static final int kFrontRightTurningCanID = 5;
+        public static final int kBackRightTurningCanID = 3;
 
         public static final int kFrontLeftAbsoluteEncoderPort = 0; /* Needs to be set */
         public static final int kBackLeftAbsoluteEncoderPort = 1; /* Needs to be set */

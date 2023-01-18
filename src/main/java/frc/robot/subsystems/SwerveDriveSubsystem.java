@@ -16,16 +16,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 
 public class SwerveDriveSubsystem extends SubsystemBase {
-    private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort, DriveConstants.kFrontLeftTurningMotorPort, DriveConstants.kFrontLeftDriveEncoderReversed, DriveConstants.kFrontLeftTurningEncoderReversed,
+    private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveCanID, DriveConstants.kFrontLeftTurningCanID, DriveConstants.kFrontLeftDriveEncoderReversed, DriveConstants.kFrontLeftTurningEncoderReversed,
         DriveConstants.kFrontLeftAbsoluteEncoderPort, DriveConstants.kFrontLeftAbsoluteEncoderOffset, DriveConstants.kFrontLeftAbsoluteEncoderReversed);
     //ADD THE ABOVE TO CONSTANTS
-    private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort, DriveConstants.kFrontRightTurningMotorPort, DriveConstants.kFrontRightDriveEncoderReversed, DriveConstants.kFrontRightTurningEncoderReversed,
+    private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveCanID, DriveConstants.kFrontRightTurningCanID, DriveConstants.kFrontRightDriveEncoderReversed, DriveConstants.kFrontRightTurningEncoderReversed,
         DriveConstants.kFrontRightAbsoluteEncoderPort, DriveConstants.kFrontRightAbsoluteEncoderOffset, DriveConstants.kFrontRightAbsoluteEncoderReversed);
 
-    private final SwerveModule backLeft = new SwerveModule(DriveConstants.kBackLeftDriveMotorPort, DriveConstants.kBackLeftTurningMotorPort, DriveConstants.kBackLeftDriveEncoderReversed, DriveConstants.kBackLeftTurningEncoderReversed,
+    private final SwerveModule backLeft = new SwerveModule(DriveConstants.kBackLeftDriveCanID, DriveConstants.kBackLeftTurningCanID, DriveConstants.kBackLeftDriveEncoderReversed, DriveConstants.kBackLeftTurningEncoderReversed,
         DriveConstants.kBackLeftAbsoluteEncoderPort, DriveConstants.kBackLeftAbsoluteEncoderOffset, DriveConstants.kBackLeftAbsoluteEncoderReversed);
 
-    private final SwerveModule backRight = new SwerveModule(DriveConstants.kBackRightDriveMotorPort, DriveConstants.kBackRightTurningMotorPort, DriveConstants.kBackRightDriveEncoderReversed, DriveConstants.kBackRightTurningEncoderReversed,
+    private final SwerveModule backRight = new SwerveModule(DriveConstants.kBackRightDriveCanID, DriveConstants.kBackRightTurningCanID, DriveConstants.kBackRightDriveEncoderReversed, DriveConstants.kBackRightTurningEncoderReversed,
         DriveConstants.kBackRightAbsoluteEncoderPort, DriveConstants.kBackRightAbsoluteEncoderOffset, DriveConstants.kBackRightAbsoluteEncoderReversed);
 
 
