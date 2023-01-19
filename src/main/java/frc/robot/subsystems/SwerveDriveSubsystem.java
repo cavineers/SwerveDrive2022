@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -13,17 +14,19 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.SPI;
 
 
 public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveCanID, DriveConstants.kFrontLeftTurningCanID, DriveConstants.kFrontLeftDriveEncoderReversed, DriveConstants.kFrontLeftTurningEncoderReversed);
-    //ADD THE ABOVE TO CONSTANTS
+
     private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveCanID, DriveConstants.kFrontRightTurningCanID, DriveConstants.kFrontRightDriveEncoderReversed, DriveConstants.kFrontRightTurningEncoderReversed);
 
     private final SwerveModule backLeft = new SwerveModule(DriveConstants.kBackLeftDriveCanID, DriveConstants.kBackLeftTurningCanID, DriveConstants.kBackLeftDriveEncoderReversed, DriveConstants.kBackLeftTurningEncoderReversed);
 
     private final SwerveModule backRight = new SwerveModule(DriveConstants.kBackRightDriveCanID, DriveConstants.kBackRightTurningCanID, DriveConstants.kBackRightDriveEncoderReversed, DriveConstants.kBackRightTurningEncoderReversed);
 
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         new Translation2d(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0),
@@ -48,7 +51,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void zeroHeading() {
-        Robot.m_ahrs.reset();
+        gyro.reset();
     }
 
     public Pose2d getPose() {
