@@ -33,7 +33,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     );
 
     public double getHeading(){
-        return Math.IEEEremainder(Robot.m_ahrs.getAngle(), 360);
+        return Math.IEEEremainder(0, 360);
     }
 
     public Rotation2d getRotation2d(){
