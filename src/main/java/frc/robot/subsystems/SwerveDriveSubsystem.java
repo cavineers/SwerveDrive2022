@@ -13,6 +13,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.SPI;
+import com.kauailabs.navx.frc.AHRS;
 
 
 public class SwerveDriveSubsystem extends SubsystemBase {
@@ -28,6 +30,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveModule backRight = new SwerveModule(DriveConstants.kBackRightDriveCanID, DriveConstants.kBackRightTurningCanID, DriveConstants.kBackRightDriveEncoderReversed, DriveConstants.kBackRightTurningEncoderReversed,
         DriveConstants.kBackRightAbsoluteEncoderPort, DriveConstants.kBackRightAbsoluteEncoderOffset, DriveConstants.kBackRightAbsoluteEncoderReversed);
 
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP); 
 
     private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         new Translation2d(DriveConstants.kTrackWidth / 2.0, DriveConstants.kWheelBase / 2.0),
@@ -37,7 +40,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     );
 
     public double getHeading(){
-        return Math.IEEEremainder(Robot.m_ahrs.getAngle(), 360);
+        return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d(){
@@ -52,7 +55,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void zeroHeading() {
-        Robot.m_ahrs.reset();
+        gyro.reset();
     }
 
     public Pose2d getPose() {

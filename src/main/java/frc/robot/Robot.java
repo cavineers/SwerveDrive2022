@@ -1,12 +1,10 @@
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,16 +15,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  //Container
-  public static RobotContainer m_robotContainer;
-
   //Subsystems
   public static SwerveDriveSubsystem m_swerveDriveSubsystem;
 
-
-  //Navx
-  public static AHRS m_ahrs;
-
+  public static RobotContainer m_robotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -37,19 +29,14 @@ public class Robot extends TimedRobot {
 
     //Subsystems
     m_swerveDriveSubsystem = new SwerveDriveSubsystem();
-    //Container
-    m_robotContainer = new RobotContainer();
-
-    //Navx
-    try {
-          m_ahrs = new AHRS(SPI.Port.kMXP); 
-        } catch (RuntimeException ex ) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
+    
 
   }
   @Override
   public void robotInit() {
+
+    //Container
+    m_robotContainer = new RobotContainer();
 
   }
 
