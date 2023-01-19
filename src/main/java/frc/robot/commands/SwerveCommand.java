@@ -12,7 +12,6 @@ public class SwerveCommand extends CommandBase {
         addRequirements(Robot.m_swerveDriveSubsystem);
     }
 
-
     private double applyDead(double value, double deadband) {
         if (Math.abs(value) < deadband) {
             return 0;
