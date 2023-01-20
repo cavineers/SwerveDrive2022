@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.SwerveModule;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -18,17 +15,41 @@ import com.kauailabs.navx.frc.AHRS;
 
 
 public class SwerveDriveSubsystem extends SubsystemBase {
-    private final SwerveModule frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveCanID, DriveConstants.kFrontLeftTurningCanID, DriveConstants.kFrontLeftDriveEncoderReversed, DriveConstants.kFrontLeftTurningEncoderReversed,
-        DriveConstants.kFrontLeftAbsoluteEncoderPort, DriveConstants.kFrontLeftAbsoluteEncoderOffset, DriveConstants.kFrontLeftAbsoluteEncoderReversed);
-    //ADD THE ABOVE TO CONSTANTS
-    private final SwerveModule frontRight = new SwerveModule(DriveConstants.kFrontRightDriveCanID, DriveConstants.kFrontRightTurningCanID, DriveConstants.kFrontRightDriveEncoderReversed, DriveConstants.kFrontRightTurningEncoderReversed,
-        DriveConstants.kFrontRightAbsoluteEncoderPort, DriveConstants.kFrontRightAbsoluteEncoderOffset, DriveConstants.kFrontRightAbsoluteEncoderReversed);
+    private final SwerveModule frontLeft = new SwerveModule(
+        DriveConstants.kFrontLeftDriveCanID, 
+        DriveConstants.kFrontLeftTurningCanID, 
+        DriveConstants.kFrontLeftDriveEncoderReversed, 
+        DriveConstants.kFrontLeftTurningEncoderReversed,
+        DriveConstants.kFrontLeftAbsoluteEncoderPort, 
+        DriveConstants.kFrontLeftAbsoluteEncoderOffset, 
+        DriveConstants.kFrontLeftAbsoluteEncoderReversed);
+    
+    private final SwerveModule frontRight = new SwerveModule(
+        DriveConstants.kFrontRightDriveCanID, 
+        DriveConstants.kFrontRightTurningCanID, 
+        DriveConstants.kFrontRightDriveEncoderReversed, 
+        DriveConstants.kFrontRightTurningEncoderReversed,
+        DriveConstants.kFrontRightAbsoluteEncoderPort, 
+        DriveConstants.kFrontRightAbsoluteEncoderOffset, 
+        DriveConstants.kFrontRightAbsoluteEncoderReversed);
 
-    private final SwerveModule backLeft = new SwerveModule(DriveConstants.kBackLeftDriveCanID, DriveConstants.kBackLeftTurningCanID, DriveConstants.kBackLeftDriveEncoderReversed, DriveConstants.kBackLeftTurningEncoderReversed,
-        DriveConstants.kBackLeftAbsoluteEncoderPort, DriveConstants.kBackLeftAbsoluteEncoderOffset, DriveConstants.kBackLeftAbsoluteEncoderReversed);
+    private final SwerveModule backLeft = new SwerveModule(
+        DriveConstants.kBackLeftDriveCanID, 
+        DriveConstants.kBackLeftTurningCanID, 
+        DriveConstants.kBackLeftDriveEncoderReversed, 
+        DriveConstants.kBackLeftTurningEncoderReversed,
+        DriveConstants.kBackLeftAbsoluteEncoderPort, 
+        DriveConstants.kBackLeftAbsoluteEncoderOffset, 
+        DriveConstants.kBackLeftAbsoluteEncoderReversed);
 
-    private final SwerveModule backRight = new SwerveModule(DriveConstants.kBackRightDriveCanID, DriveConstants.kBackRightTurningCanID, DriveConstants.kBackRightDriveEncoderReversed, DriveConstants.kBackRightTurningEncoderReversed,
-        DriveConstants.kBackRightAbsoluteEncoderPort, DriveConstants.kBackRightAbsoluteEncoderOffset, DriveConstants.kBackRightAbsoluteEncoderReversed);
+    private final SwerveModule backRight = new SwerveModule(
+        DriveConstants.kBackRightDriveCanID, 
+        DriveConstants.kBackRightTurningCanID, 
+        DriveConstants.kBackRightDriveEncoderReversed, 
+        DriveConstants.kBackRightTurningEncoderReversed,
+        DriveConstants.kBackRightAbsoluteEncoderPort, 
+        DriveConstants.kBackRightAbsoluteEncoderOffset, 
+        DriveConstants.kBackRightAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP); 
 
@@ -51,7 +72,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     SwerveDriveOdometry m_odometer = m_odometry;
 
     public SwerveDriveSubsystem() {
-        zeroHeading();
+        //Delay reset of navx for proper initialization
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                zeroHeading();
+            } catch (Exception e) {
+            }
+        }).start();
     }
 
     public void zeroHeading() {
@@ -87,7 +115,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[3]);
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldOriented) {
+    /*public void drive(Translation2d translation, double rotation, boolean fieldOriented) {
         rotation *= 2.0 / Math.hypot(DriveConstants.kWheelBase, DriveConstants.kTrackWidth);
         ChassisSpeeds speeds;
         if (fieldOriented) {
@@ -102,5 +130,5 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         frontRight.setDesiredState(states[1]);
         backLeft.setDesiredState(states[2]);
         backRight.setDesiredState(states[3]);
-    }
+    }*/
 }
