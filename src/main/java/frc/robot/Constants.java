@@ -33,11 +33,6 @@ public final class Constants {
         public static final int kFrontRightTurningCanID = 5;
         public static final int kBackRightTurningCanID = 3;
 
-        public static final int kFrontLeftAbsoluteEncoderPort = 0; //TBD
-        public static final int kBackLeftAbsoluteEncoderPort = 1; //TBD
-        public static final int kFrontRightAbsoluteEncoderPort = 2; //TBD
-        public static final int kBackRightAbsoluteEncoderPort = 3; //TBD
-
         public static final boolean kFrontLeftTurningEncoderReversed = true;
         public static final boolean kBackLeftTurningEncoderReversed = true;
         public static final boolean kFrontRightTurningEncoderReversed = true;
