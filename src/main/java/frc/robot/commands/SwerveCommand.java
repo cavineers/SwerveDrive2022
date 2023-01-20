@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.Robot;
 import java.lang.Math;
 import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -13,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveCommand extends CommandBase {
 
+    private final SwerveDriveSubsystem swerveSubsystem;
+
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> fieldOrientedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
@@ -20,7 +21,7 @@ public class SwerveCommand extends CommandBase {
     public SwerveCommand(SwerveDriveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
             Supplier<Boolean> fieldOrientedFunction) {
-        Robot.m_swerveDriveSubsystem = swerveSubsystem;
+        this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
@@ -58,7 +59,7 @@ public class SwerveCommand extends CommandBase {
         if (fieldOrientedFunction.get()) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, turningSpeed, Robot.m_swerveDriveSubsystem.getRotation2d());
+                    xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
         } else {
             // Relative to robot
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
@@ -68,12 +69,12 @@ public class SwerveCommand extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         
         // Output each module states to wheels
-        Robot.m_swerveDriveSubsystem.setModuleStates(moduleStates);
+        swerveSubsystem.setModuleStates(moduleStates);
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.m_swerveDriveSubsystem.stopModules();
+        swerveSubsystem.stopModules();
     }
 
     @Override
