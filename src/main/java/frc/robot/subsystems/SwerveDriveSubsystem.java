@@ -77,13 +77,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         backLeft.getPosition(),
         backRight.getPosition()
     });
-    public SwerveModulePosition[] getModulePositions(){
-        SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for(SwerveModule mod : mSwerveMods){
-            positions[mod.moduleNumber] = mod.getPosition();
-        }
-        return positions;
-    }
+
     
     SwerveDriveOdometry m_odometer = m_odometry;
 
@@ -106,8 +100,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         return m_odometer.getPoseMeters();
     }
 
+    public SwerveModulePosition[] getPositions() {
+        return new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()};
+    }
     public void resetOdometry(Pose2d pose) {
-        m_odometer.resetPosition(pose, getRotation2d());
+         
+        m_odometer.resetPosition(getRotation2d(), getPositions(), pose);
     }
 
     public void stopModules() {
@@ -118,8 +120,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void periodic(){
-        m_odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
-        backRight.getState());
+        m_odometer.update(getRotation2d(), getPositions());
+        backRight.getState();
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }

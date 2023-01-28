@@ -75,10 +75,10 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            driveEncoder.getDistance(), new Rotation2d(turningEncoder.getDistance()));
-      }
+            0.0, new Rotation2d((absoluteEncoder.getAbsolutePosition()) * Math.PI / 180));
+    }
     
-
+    
     public double getDriveVelocity() {
         return driveEncoder.getVelocity();
     }
