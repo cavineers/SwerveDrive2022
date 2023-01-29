@@ -18,6 +18,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,16 +35,7 @@ public class SwerveModule {
 
     private final PIDController turningPidController;
 
-    private final CANCoder absoluteEncoder;
-    private final boolean absoluteEncoderReversed;
-    private final double absoluteEncoderOffsetRad;
-
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
-
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
-        this.absoluteEncoderReversed = absoluteEncoderReversed;
-        this.absoluteEncoder = new CANCoder(absoluteEncoderId);
+    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed) {
 
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
@@ -89,7 +81,7 @@ public class SwerveModule {
 
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        turningEncoder.setPosition(absoluteEncoder.getAbsolutePosition());
+        turningEncoder.setPosition(0);
     }
 
     public SwerveModuleState getState() {
@@ -104,8 +96,7 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        SmartDashboard.putString("Swerve[" + absoluteEncoder.getAbsolutePosition() + "] Abs Position", state.toString());
-        SmartDashboard.putString("Swerve[" + absoluteEncoder.getPosition() + "] Position", state.toString());
+        //SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
     }
 
     public void stop() {
