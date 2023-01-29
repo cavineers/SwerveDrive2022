@@ -1,22 +1,10 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-
 import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -64,12 +52,6 @@ public class SwerveModule {
     public double getTurningPosition() {
         return turningEncoder.getPosition();
     }
-
-    public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(
-            driveEncoder.getDistance(), new Rotation2d(turningEncoder.getDistance()));
-      }
-    
 
     public double getDriveVelocity() {
         return driveEncoder.getVelocity();
