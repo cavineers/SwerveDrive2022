@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class SwerveModule {
 
@@ -49,6 +50,11 @@ public class SwerveModule {
 
     public double getTurningPosition() {
         return turningEncoder.getPosition();
+    }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(
+            0.0, new Rotation2d(getTurningPosition()));
     }
 
     public double getDriveVelocity() {

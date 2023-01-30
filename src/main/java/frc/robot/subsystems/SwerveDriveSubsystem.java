@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.SPI;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 
 public class SwerveDriveSubsystem extends SubsystemBase {
@@ -57,7 +58,17 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
         m_kinematics, 
-        getRotation2d());
+        getRotation2d(),
+        getPositions()
+        );
+
+    public SwerveModulePosition[] getPositions() {
+        return new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()};
+        }
 
     SwerveDriveOdometry m_odometer = m_odometry;
 
@@ -81,7 +92,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        m_odometer.resetPosition(pose, getRotation2d());
+        m_odometer.resetPosition(getRotation2d(), getPositions(), pose);
     }
 
     public void stopModules() {
@@ -92,8 +103,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void periodic(){
-        m_odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
-        backRight.getState());
+        m_odometer.update(getRotation2d(), getPositions());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
