@@ -68,6 +68,12 @@ public final class Constants {
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2),
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
+
+        public static final double balancingControlGoalDegrees = 0;
+        public static final double balancingControlTresholdDegrees = 1;
+        public static final double balancingControlDriveKP = 0.015; // P (Proportional) constant of a PID loop
+        public static final double blancingControlBackwardsPowerMultiplier = 1.35;
+
     }
 
     public static final class OIConstants {
