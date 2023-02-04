@@ -5,7 +5,9 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.Constants.DriveConstants;
-
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import java.util.function.Supplier;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,16 +18,12 @@ public class BalanceControlCommand extends CommandBase {
     private double error;
     private double currentAngle;
     private double drivePower;
+    private final Supplier<Boolean> fieldOrientedFunction;
 
-    public BalanceControlCommand() {
-        this.swerveSubsystem = RobotContainer.swerveSubsystem;
-        addRequirements(m_DriveSubsystem);
+    public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem, Supplier<Boolean> fieldOrientedFunction) {
+      this.swerveSubsystem = swerveSubsystem;
+      this.fieldOrientedFunction = fieldOrientedFunction;
       }
-      public BalanceOnBeamCommand() {
-        this.m_DriveSubsystem = Robot.m_driveSubsystem;
-        addRequirements(m_DriveSubsystem);
-      }
-    
       // Called when the command is initially scheduled.
       @Override
       public void initialize() {}
@@ -49,8 +47,21 @@ public class BalanceControlCommand extends CommandBase {
         if (Math.abs(drivePower) > 0.4) {
           drivePower = Math.copySign(0.4, drivePower);
         }
-    
-        m_DriveSubsystem.drive(drivePower, drivePower);
+     // Construct desired chassis speeds
+        ChassisSpeeds chassisSpeeds;
+        if (fieldOrientedFunction.get()) {
+            // Relative to field
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+              drivePower, 0 , 0, swerveSubsystem.getRotation2d());
+        } else {
+            // Relative to robot
+            chassisSpeeds = new ChassisSpeeds(drivePower, 0, 0);
+        }
+        
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        
+        // Output each module states to wheels
+        swerveSubsystem.setModuleStates(moduleStates);
         
         // Debugging Print Statments
         System.out.println("Current Angle: " + currentAngle);
