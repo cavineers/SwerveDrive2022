@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.BalanceControlCommand;
 import frc.robot.commands.SwerveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.Constants.OIConstants;
@@ -12,6 +13,7 @@ public class RobotContainer {
     private final SwerveDriveSubsystem swerveSubsystem = new SwerveDriveSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
+    private JoystickButton button1 = new JoystickButton(driverJoystick, 1);
 
     public RobotContainer() {
 
@@ -23,6 +25,9 @@ public class RobotContainer {
             () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
 
         configureButtonBindings();
+
+        button1.whenPressed(new BalanceControlCommand(swerveSubsystem, ));
+
 
     };
 
