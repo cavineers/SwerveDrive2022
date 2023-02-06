@@ -26,7 +26,7 @@ public class RobotContainer {
 
         configureButtonBindings();
 
-        buttonX.whenPressed(new BalanceControlCommand(swerveSubsystem,!driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
+        buttonX.onTrue(new BalanceControlCommand(swerveSubsystem));
 
 
     };
@@ -34,7 +34,7 @@ public class RobotContainer {
     
 
     private void configureButtonBindings() {
-        
+
     }   
 
 }

@@ -18,11 +18,11 @@ public class BalanceControlCommand extends CommandBase {
     private double error;
     private double currentAngle;
     private double drivePower;
-    private final Supplier<Boolean> fieldOrientedFunction;
+    private final boolean fieldOrientedFunction;
 
-    public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem, Supplier<Boolean> fieldOrientedFunction) {
+    public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem){
       this.swerveSubsystem = swerveSubsystem;
-      this.fieldOrientedFunction = fieldOrientedFunction;
+      this.fieldOrientedFunction = true;
       }
       // Called when the command is initially scheduled.
       @Override
@@ -49,7 +49,7 @@ public class BalanceControlCommand extends CommandBase {
         }
      // Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
-        if (fieldOrientedFunction.get()) {
+        if (fieldOrientedFunction) {
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
               drivePower, 0 , 0, swerveSubsystem.getRotation2d());
