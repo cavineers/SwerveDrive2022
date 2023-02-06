@@ -13,7 +13,7 @@ public class RobotContainer {
     private final SwerveDriveSubsystem swerveSubsystem = new SwerveDriveSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
-    private JoystickButton button1 = new JoystickButton(driverJoystick, 1);
+    private JoystickButton buttonX = new JoystickButton(driverJoystick, 3);
 
     public RobotContainer() {
 
@@ -26,7 +26,7 @@ public class RobotContainer {
 
         configureButtonBindings();
 
-        button1.whenPressed(new BalanceControlCommand(swerveSubsystem, ));
+        buttonX.whenPressed(new BalanceControlCommand(swerveSubsystem,!driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
 
 
     };
@@ -34,7 +34,7 @@ public class RobotContainer {
     
 
     private void configureButtonBindings() {
-
+        
     }   
 
 }
