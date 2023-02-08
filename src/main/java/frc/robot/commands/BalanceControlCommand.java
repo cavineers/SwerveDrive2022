@@ -1,14 +1,11 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.BalanceConstants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import java.util.function.Supplier;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class BalanceControlCommand extends CommandBase {
@@ -50,7 +47,6 @@ public class BalanceControlCommand extends CommandBase {
         // Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
         
-
         chassisSpeeds = new ChassisSpeeds(drivePower, 0, 0);
     
         
@@ -59,10 +55,9 @@ public class BalanceControlCommand extends CommandBase {
         // Output each module states to wheels
         swerveSubsystem.setModuleStates(moduleStates);
         
-        // Debugging Print Statments
-        System.out.println("Current Angle: " + currentAngle);
-        System.out.println("Error " + error);
-        System.out.println("Drive Power: " + drivePower);
+        SmartDashboard.putString("Current Angle: ", ""+currentAngle);
+        SmartDashboard.putString("Error ", ""+error);
+        SmartDashboard.putString("Drive Power: ",""+ drivePower);
       }
     
       // Called once the command ends or is interrupted.
