@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import frc.robot.Constants;
+import frc.robot.Constants.BalanceConstants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -18,11 +18,9 @@ public class BalanceControlCommand extends CommandBase {
     private double error;
     private double currentAngle;
     private double drivePower;
-    private final boolean fieldOrientedFunction;
 
     public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem){
       this.swerveSubsystem = swerveSubsystem;
-      this.fieldOrientedFunction = true;
       }
       // Called when the command is initially scheduled.
       @Override
@@ -33,30 +31,28 @@ public class BalanceControlCommand extends CommandBase {
       public void execute() {
         // Uncomment the line below this to simulate the gyroscope axis with a controller joystick
         // Double currentAngle = -1 * Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
+
         this.currentAngle = swerveSubsystem.getPitch();
     
-        error = DriveConstants.balancingControlGoalDegrees - currentAngle;
-        drivePower = -Math.min(DriveConstants.balancingControlDriveKP * error, 1);
+        error = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
+        drivePower = -Math.min(BalanceConstants.kBalancingControlDriveKP * error, 1);
     
         // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
         if (drivePower < 0) {
-          drivePower *= DriveConstants.blancingControlBackwardsPowerMultiplier;
+          drivePower *= BalanceConstants.kBalancingControlBackwardsPowerMultiplier;
         }
     
         // Limit the max power
-        if (Math.abs(drivePower) > 0.4) {
-          drivePower = Math.copySign(0.4, drivePower);
+        if (Math.abs(drivePower) > 0.5) {
+          drivePower = Math.copySign(0.5, drivePower);
         }
-     // Construct desired chassis speeds
+        
+        // Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
-        if (fieldOrientedFunction) {
-            // Relative to field
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-              drivePower, 0 , 0, swerveSubsystem.getRotation2d());
-        } else {
-            // Relative to robot
-            chassisSpeeds = new ChassisSpeeds(drivePower, 0, 0);
-        }
+        
+
+        chassisSpeeds = new ChassisSpeeds(drivePower, 0, 0);
+    
         
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         
@@ -78,6 +74,6 @@ public class BalanceControlCommand extends CommandBase {
       // Returns true when the command should end.
       @Override
       public boolean isFinished() {
-        return Math.abs(error) < DriveConstants.balancingControlTresholdDegrees; // End the command when we are within the specified threshold of being 'flat' (gyroscope pitch of 0 degrees)
+        return Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees; // End the command when we are within the specified threshold of being 'flat' (gyroscope pitch of 0 degrees)
       }
     }
