@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.BalanceControlCommand;
 import frc.robot.commands.SwerveCommand;
+import frc.robot.commands.SwitchFunction;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.Constants.OIConstants;
 
@@ -14,6 +15,7 @@ public class RobotContainer {
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
     private JoystickButton buttonX = new JoystickButton(driverJoystick, 3);
+    private JoystickButton buttonY = new JoystickButton(driverJoystick, 4);
 
     public RobotContainer() {
 
@@ -28,13 +30,14 @@ public class RobotContainer {
 
         buttonX.onTrue(new BalanceControlCommand(swerveSubsystem));
 
+        buttonY.onTrue(new SwitchFunction(swerveSubsystem));
+
 
     };
 
     
 
     private void configureButtonBindings() {
-
     }   
 
 }
