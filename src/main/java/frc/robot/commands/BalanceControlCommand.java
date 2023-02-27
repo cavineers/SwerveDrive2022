@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import frc.robot.Robot;
 import frc.robot.Constants.BalanceConstants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.Constants.DriveConstants;
@@ -7,17 +8,20 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class BalanceControlCommand extends CommandBase {
     
-    private final SwerveDriveSubsystem swerveSubsystem;
-
     private double error;
     private double currentAngle;
     private double drivePower;
+    private final SwerveDriveSubsystem swerveSubsystem;
+
 
     public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem){
+      System.out.println("Started Balance");
       this.swerveSubsystem = swerveSubsystem;
+      addRequirements(swerveSubsystem);
       }
       // Called when the command is initially scheduled.
       @Override
@@ -53,17 +57,20 @@ public class BalanceControlCommand extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         
         // Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
+        this.swerveSubsystem.setModuleStates(moduleStates);
         
-        SmartDashboard.putString("Current Angle: ", ""+currentAngle);
-        SmartDashboard.putString("Error ", ""+error);
-        SmartDashboard.putString("Drive Power: ",""+ drivePower);
+       
       }
     
       // Called once the command ends or is interrupted.
       @Override
       public void end(boolean interrupted) {
-        swerveSubsystem.stopModules();
+        ChassisSpeeds chassisSpeedsStop;
+        chassisSpeedsStop = new ChassisSpeeds(0, 0, 0);
+    
+        
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsStop);
+        swerveSubsystem.setModuleStates(moduleStates);
       }
     
       // Returns true when the command should end.

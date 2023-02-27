@@ -31,14 +31,14 @@ public final class Constants {
         
 
         public static final int kFrontLeftDriveCanID = 3;
-        public static final int kBackLeftDriveCanID = 7;
-        public static final int kFrontRightDriveCanID = 4;
-        public static final int kBackRightDriveCanID = 5;
+        public static final int kBackLeftDriveCanID = 1;
+        public static final int kFrontRightDriveCanID = 5;
+        public static final int kBackRightDriveCanID = 7;
 
-        public static final int kFrontLeftTurningCanID = 1;
-        public static final int kBackLeftTurningCanID = 8;
-        public static final int kFrontRightTurningCanID = 2;
-        public static final int kBackRightTurningCanID = 6;
+        public static final int kFrontLeftTurningCanID = 4;
+        public static final int kBackLeftTurningCanID = 2;
+        public static final int kFrontRightTurningCanID = 6;
+        public static final int kBackRightTurningCanID = 8;
 
         public static final boolean kFrontLeftTurningEncoderReversed = true;
         public static final boolean kBackLeftTurningEncoderReversed = true;
