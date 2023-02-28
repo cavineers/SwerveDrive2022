@@ -47,7 +47,8 @@ public class BalanceControlCommand extends CommandBase {
         // Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
         
-        chassisSpeeds = new ChassisSpeeds(drivePower, 0, 0);
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+          drivePower, 0, 0, swerveSubsystem.getRotation2d());
     
         
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -55,9 +56,9 @@ public class BalanceControlCommand extends CommandBase {
         // Output each module states to wheels
         swerveSubsystem.setModuleStates(moduleStates);
         
-        SmartDashboard.putString("Current Angle: ", ""+currentAngle);
-        SmartDashboard.putString("Error ", ""+error);
-        SmartDashboard.putString("Drive Power: ",""+ drivePower);
+        SmartDashboard.putNumber("Current Angle: ", currentAngle);
+        SmartDashboard.putNumber("Error ", error);
+        SmartDashboard.putNumber("Drive Power: ", drivePower);
       }
     
       // Called once the command ends or is interrupted.
@@ -69,6 +70,7 @@ public class BalanceControlCommand extends CommandBase {
       // Returns true when the command should end.
       @Override
       public boolean isFinished() {
-        return Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees; // End the command when we are within the specified threshold of being 'flat' (gyroscope pitch of 0 degrees)
+        // End the command when we are within the specified threshold of being 'flat' (gyroscope pitch of 0 degrees)
+        return Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees;
       }
     }
