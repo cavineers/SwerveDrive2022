@@ -31,14 +31,14 @@ public final class Constants {
         
 
         public static final int kFrontLeftDriveCanID = 3;
-        public static final int kBackLeftDriveCanID = 7;
-        public static final int kFrontRightDriveCanID = 4;
-        public static final int kBackRightDriveCanID = 5;
+        public static final int kBackLeftDriveCanID = 1;
+        public static final int kFrontRightDriveCanID = 5;
+        public static final int kBackRightDriveCanID = 7;
 
-        public static final int kFrontLeftTurningCanID = 1;
-        public static final int kBackLeftTurningCanID = 8;
-        public static final int kFrontRightTurningCanID = 2;
-        public static final int kBackRightTurningCanID = 6;
+        public static final int kFrontLeftTurningCanID = 4;
+        public static final int kBackLeftTurningCanID = 2;
+        public static final int kFrontRightTurningCanID = 6;
+        public static final int kBackRightTurningCanID = 8;
 
         public static final boolean kFrontLeftTurningEncoderReversed = true;
         public static final boolean kBackLeftTurningEncoderReversed = true;
@@ -50,20 +50,10 @@ public final class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
 
-        public static final boolean kFrontLeftAbsoluteEncoderReversed = true; //TBD
-        public static final boolean kBackLeftAbsoluteEncoderReversed = true; //TBD
-        public static final boolean kFrontRightAbsoluteEncoderReversed = false; //TBD
-        public static final boolean kBackRightAbsoluteEncoderReversed = false; //TBD
-
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
-
-        public static final double kFrontLeftAbsoluteEncoderOffset = 0; 
-        public static final double kBackLeftAbsoluteEncoderOffset = 0; 
-        public static final double kFrontRightAbsoluteEncoderOffset = 0; 
-        public static final double kBackRightAbsoluteEncoderOffset = 0; 
         
         // Distance between right and left wheels
         public static final double kTrackWidth = Units.inchesToMeters(17.5); //TBD
