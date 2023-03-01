@@ -10,7 +10,7 @@ public final class Constants {
         public static final double kBalancingControlGoalDegrees = 0;
         public static final double kBalancingControlTresholdDegrees = 1;
         public static final double kBalancingControlDriveKP = 0.015; // P (Proportional) constant of a PID loop
-        public static final double kBalancingControlBackwardsPowerMultiplier = 1.35;
+        public static final double kBalancingControlBackwardsPowerMultiplier = 6.5;
     }
 
     public static final class ModuleConstants {
@@ -50,20 +50,10 @@ public final class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
 
-        public static final boolean kFrontLeftAbsoluteEncoderReversed = true; //TBD
-        public static final boolean kBackLeftAbsoluteEncoderReversed = true; //TBD
-        public static final boolean kFrontRightAbsoluteEncoderReversed = false; //TBD
-        public static final boolean kBackRightAbsoluteEncoderReversed = false; //TBD
-
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
-
-        public static final double kFrontLeftAbsoluteEncoderOffset = 0; 
-        public static final double kBackLeftAbsoluteEncoderOffset = 0; 
-        public static final double kFrontRightAbsoluteEncoderOffset = 0; 
-        public static final double kBackRightAbsoluteEncoderOffset = 0; 
         
         // Distance between right and left wheels
         public static final double kTrackWidth = Units.inchesToMeters(17.5); //TBD
