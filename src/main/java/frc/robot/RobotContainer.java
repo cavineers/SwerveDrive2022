@@ -45,6 +45,6 @@ public class RobotContainer {
                 m_balance = new BalanceControlCommand(swerveSubsystem);
                 m_balance.schedule();
             }
-    }   
-
+    });
+    }
 }
