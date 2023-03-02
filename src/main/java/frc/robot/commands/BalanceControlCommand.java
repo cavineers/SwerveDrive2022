@@ -69,12 +69,35 @@ public class BalanceControlCommand extends CommandBase {
       // Called once the command ends or is interrupted.
       @Override
       public void end(boolean interrupted) {
-        ChassisSpeeds chassisSpeedsStop;
-        chassisSpeedsStop = new ChassisSpeeds(0, 0, 0);
+        System.out.println("COMMAND FINISHED");
+        ChassisSpeeds chassisSpeedsStopForward;
+        ChassisSpeeds chassisSpeedsStopSide;
+        chassisSpeedsStopForward = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.1, 0, swerveSubsystem.getRotation2d());
+        chassisSpeedsStopSide = ChassisSpeeds.fromFieldRelativeSpeeds(0.1, 0, 0, swerveSubsystem.getRotation2d());
+      
+        SwerveModuleState[] moduleStatesForward = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsStopForward);
+        SwerveModuleState[] moduleStatesSide = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsStopSide);
     
-        
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsStop);
-        swerveSubsystem.setModuleStates(moduleStates);
+        SwerveModuleState[] moduleStatesForwardCorners = new SwerveModuleState[] {
+          moduleStatesForward[0],
+          new SwerveModuleState(),
+          new SwerveModuleState(),
+          moduleStatesForward[3]
+        };
+
+        SwerveModuleState[] moduleStatesSideCorners = new SwerveModuleState[] {
+          new SwerveModuleState(),
+          moduleStatesSide[1],
+          moduleStatesSide[2],
+          new SwerveModuleState()
+        };
+
+        swerveSubsystem.setModuleStates(moduleStatesForwardCorners);
+        swerveSubsystem.setModuleStates(moduleStatesSideCorners);
+
+        swerveSubsystem.stopModules();
+
+
       }
     
       // Returns true when the command should end.

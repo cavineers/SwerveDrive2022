@@ -92,6 +92,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         return gyro.getPitch();
     }
 
+    public double getRoll() {
+        return gyro.getRoll();
+    }
+
     public Pose2d getPose() {
         return m_odometer.getPoseMeters();
     }
@@ -125,5 +129,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
     }
+
 
 }
