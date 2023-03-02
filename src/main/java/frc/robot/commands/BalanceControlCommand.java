@@ -36,7 +36,7 @@ public class BalanceControlCommand extends CommandBase {
         this.currentAngle = swerveSubsystem.getPitch();
     
         error = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
-        drivePower = -Math.min(BalanceConstants.kBalancingControlDriveKP * error, 1);
+        drivePower = -Math.min(BalanceConstants.kBalancingControlDriveP * error, 1);
     
         // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
         if (drivePower < 0) {
