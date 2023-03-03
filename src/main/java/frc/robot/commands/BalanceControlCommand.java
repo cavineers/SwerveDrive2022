@@ -78,24 +78,16 @@ public class BalanceControlCommand extends CommandBase {
         SwerveModuleState[] moduleStatesForward = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsStopForward);
         SwerveModuleState[] moduleStatesSide = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeedsStopSide);
     
-        SwerveModuleState[] moduleStatesForwardCorners = new SwerveModuleState[] {
+        SwerveModuleState[] combinedStates = new SwerveModuleState[] {
           moduleStatesForward[0],
-          new SwerveModuleState(),
-          new SwerveModuleState(),
+          moduleStatesSide[1],
+          moduleStatesSide[2],
           moduleStatesForward[3]
         };
 
-        SwerveModuleState[] moduleStatesSideCorners = new SwerveModuleState[] {
-          new SwerveModuleState(),
-          moduleStatesSide[1],
-          moduleStatesSide[2],
-          new SwerveModuleState()
-        };
+        swerveSubsystem.setModuleStates(combinedStates);
 
-        swerveSubsystem.setModuleStates(moduleStatesForwardCorners);
-        swerveSubsystem.setModuleStates(moduleStatesSideCorners);
-
-        swerveSubsystem.stopModules();
+        //swerveSubsystem.stopModules();
 
 
       }
