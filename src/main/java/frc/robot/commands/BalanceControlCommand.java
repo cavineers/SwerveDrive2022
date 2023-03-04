@@ -16,11 +16,14 @@ public class BalanceControlCommand extends CommandBase {
     private double currentAngle;
     private double drivePower;
     private final SwerveDriveSubsystem swerveSubsystem;
+    private int counter;
+    private boolean m_isFinished;
 
 
     public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem){
       System.out.println("Started Balance");
       this.swerveSubsystem = swerveSubsystem;
+      this.m_isFinished = false;
       addRequirements(swerveSubsystem);
       }
       // Called when the command is initially scheduled.
@@ -28,15 +31,24 @@ public class BalanceControlCommand extends CommandBase {
       public void initialize() {}
     
       // Called every time the scheduler runs while the command is scheduled.
+
       @Override
       public void execute() {
         // Uncomment the line below this to simulate the gyroscope axis with a controller joystick
         // Double currentAngle = -1 * Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
 
-        this.currentAngle = swerveSubsystem.getPitch();
+        this.currentAngle = swerveSubsystem.getRoll();
     
         error = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
-        drivePower = -Math.min(BalanceConstants.kBalancingControlDriveP * error, 1);
+        drivePower = Math.min(BalanceConstants.kBalancingControlDriveP * error, 1);
+
+        if (Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees) {
+          counter += 1;
+        }
+
+        if (counter > 100) {
+          this.m_isFinished = true;
+        }
     
         // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
         if (drivePower < 0) {
@@ -96,6 +108,6 @@ public class BalanceControlCommand extends CommandBase {
       @Override
       public boolean isFinished() {
         // End the command when we are within the specified threshold of being 'flat' (gyroscope pitch of 0 degrees)
-        return Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees;
+        return this.m_isFinished;
       }
     }

@@ -8,9 +8,9 @@ public final class Constants {
 
     public static final class BalanceConstants {
         public static final double kBalancingControlGoalDegrees = 0;
-        public static final double kBalancingControlTresholdDegrees = 1;
-        public static final double kBalancingControlDriveP = 0.045; // P (Proportional) constant of a PID loop
-        public static final double kBalancingControlBackwardsPowerMultiplier = 6.5;
+        public static final double kBalancingControlTresholdDegrees = 2.5;
+        public static final double kBalancingControlDriveP = 0.04; // P (Proportional) constant of a PID loop
+        public static final double kBalancingControlBackwardsPowerMultiplier = 2;
     }
 
     public static final class ModuleConstants {

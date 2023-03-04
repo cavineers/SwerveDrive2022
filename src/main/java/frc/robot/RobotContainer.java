@@ -20,7 +20,7 @@ public class RobotContainer {
     private final SwerveDriveSubsystem swerveSubsystem = new SwerveDriveSubsystem();
     public Command m_balance;
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverJoystickPort);
-    private JoystickButton buttonX = new JoystickButton(driverJoystick, 3);
+    private JoystickButton buttonRightMenu = new JoystickButton(driverJoystick, 8);
     private JoystickButton buttonY = new JoystickButton(driverJoystick, 4);
 
     public RobotContainer() {
@@ -39,9 +39,9 @@ public class RobotContainer {
     
 
     private void configureButtonBindings() {
-        buttonX.onTrue(new InstantCommand(){
+        buttonRightMenu.onTrue(new InstantCommand(){
             public void initialize() {
-                System.out.println("Button X pressed");
+                System.out.println("Button Right Menu pressed");
                 m_balance = new BalanceControlCommand(swerveSubsystem);
                 m_balance.schedule();
             }

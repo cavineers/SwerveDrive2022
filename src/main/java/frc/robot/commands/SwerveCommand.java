@@ -55,7 +55,7 @@ public class SwerveCommand extends CommandBase {
 
         // Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
-        if (fieldOrientedFunction.get()) {
+        if (true) {
             // Relative to robot
             // chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
             
