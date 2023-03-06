@@ -18,6 +18,8 @@ public class BalanceControlCommand extends CommandBase {
     private final SwerveDriveSubsystem swerveSubsystem;
     private int counter;
     private boolean m_isFinished;
+    private double errorPrevious;
+    private double driverPowerPrevious;
 
 
     public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem){
@@ -28,7 +30,12 @@ public class BalanceControlCommand extends CommandBase {
       }
       // Called when the command is initially scheduled.
       @Override
-      public void initialize() {}
+      public void initialize() {
+        this.errorPrevious = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
+        this.driverPowerPrevious = Math.min(BalanceConstants.kBalancingControlDriveP * this.errorPrevious, 1);
+        this.counter = 0;
+
+      }
     
       // Called every time the scheduler runs while the command is scheduled.
 
@@ -36,52 +43,57 @@ public class BalanceControlCommand extends CommandBase {
       public void execute() {
         // Uncomment the line below this to simulate the gyroscope axis with a controller joystick
         // Double currentAngle = -1 * Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
-
+    
         this.currentAngle = swerveSubsystem.getRoll();
     
         error = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
         drivePower = Math.min(BalanceConstants.kBalancingControlDriveP * error, 1);
 
-        if (Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees) {
-          counter += 1;
-        }
+        if (Math.round(this.driverPowerPrevious) <= Math.round(this.drivePower) || Math.signum(this.errorPrevious) != Math.signum(error)) {
+          
+          this.errorPrevious = error;
 
-        if (counter > 100) {
-          this.m_isFinished = true;
+          if (Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees) {
+            counter += 1;
+          }
+
+          if (counter > 100) {
+            this.m_isFinished = true;
+          }
+      
+          // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
+          if (drivePower < 0) {
+            drivePower *= BalanceConstants.kBalancingControlBackwardsPowerMultiplier;
+          }
+      
+          // Limit the max power
+          if (Math.abs(drivePower) > 0.5) {
+            drivePower = Math.copySign(0.5, drivePower);
+          }
+          
+          // Construct desired chassis speeds
+          ChassisSpeeds chassisSpeeds;
+          
+          chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            drivePower, 0, 0, swerveSubsystem.getRotation2d());
+      
+          
+          SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+          
+          // Output each module states to wheels
+          this.swerveSubsystem.setModuleStates(moduleStates);
         }
-    
-        // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
-        if (drivePower < 0) {
-          drivePower *= BalanceConstants.kBalancingControlBackwardsPowerMultiplier;
-        }
-    
-        // Limit the max power
-        if (Math.abs(drivePower) > 0.5) {
-          drivePower = Math.copySign(0.5, drivePower);
-        }
-        
-        // Construct desired chassis speeds
-        ChassisSpeeds chassisSpeeds;
-        
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          drivePower, 0, 0, swerveSubsystem.getRotation2d());
-    
-        
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-        
-        // Output each module states to wheels
-        this.swerveSubsystem.setModuleStates(moduleStates);
+        else {
+          this.lockWheels();
+        } 
         
 
         SmartDashboard.putNumber("Current Angle: ", currentAngle);
         SmartDashboard.putNumber("Error ", error);
         SmartDashboard.putNumber("Drive Power: ", drivePower);
       }
-    
-      // Called once the command ends or is interrupted.
-      @Override
-      public void end(boolean interrupted) {
-        System.out.println("COMMAND FINISHED");
+
+      public void lockWheels(){
         ChassisSpeeds chassisSpeedsStopForward;
         ChassisSpeeds chassisSpeedsStopSide;
         chassisSpeedsStopForward = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.1, 0, swerveSubsystem.getRotation2d());
@@ -98,7 +110,14 @@ public class BalanceControlCommand extends CommandBase {
         };
 
         swerveSubsystem.setModuleStates(combinedStates);
-
+      }
+    
+      // Called once the command ends or is interrupted.
+      @Override
+      public void end(boolean interrupted) {
+        System.out.println("COMMAND FINISHED");
+        
+        this.lockWheels();
         //swerveSubsystem.stopModules();
 
 
