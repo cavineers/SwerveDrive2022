@@ -10,87 +10,73 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
+import edu.wpi.first.math.controller.PIDController;
+
 public class BalanceControlCommand extends CommandBase {
     
     private double error;
+    private double previousError;
+
     private double currentAngle;
     private double drivePower;
     private final SwerveDriveSubsystem swerveSubsystem;
     private int counter;
     private boolean m_isFinished;
-    private double errorPrevious;
-    private double driverPowerPrevious;
+    private PIDController pidController;
 
 
     public BalanceControlCommand(SwerveDriveSubsystem swerveSubsystem){
       System.out.println("Started Balance");
       this.swerveSubsystem = swerveSubsystem;
       this.m_isFinished = false;
+
+      this.pidController = new PIDController(BalanceConstants.kBalancingControlDriveP, BalanceConstants.kBalancingControlDriveI, BalanceConstants.kBalancingControlDriveD);
+      this.pidController.setSetpoint(0);
+      
       addRequirements(swerveSubsystem);
       }
       // Called when the command is initially scheduled.
       @Override
       public void initialize() {
-        this.errorPrevious = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
-        this.driverPowerPrevious = Math.min(BalanceConstants.kBalancingControlDriveP * this.errorPrevious, 1);
+        this.currentAngle = swerveSubsystem.getRoll();
+        this.error = 0 - currentAngle;
         this.counter = 0;
-
+        this.previousError = error;
       }
-    
+      
+
+      // Calc PID Loop speeds
+
+      public void calcPID(){
+        currentAngle = swerveSubsystem.getRoll();
+        error = 0 - currentAngle;
+        drivePower = pidController.calculate(error);
+      }
       // Called every time the scheduler runs while the command is scheduled.
 
       @Override
       public void execute() {
         // Uncomment the line below this to simulate the gyroscope axis with a controller joystick
         // Double currentAngle = -1 * Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
-    
-        this.currentAngle = swerveSubsystem.getRoll();
-    
-        error = BalanceConstants.kBalancingControlGoalDegrees - currentAngle;
-        drivePower = Math.min(BalanceConstants.kBalancingControlDriveP * error, 1);
+          if (this.runChecks()) {
 
-        if (Math.round(this.driverPowerPrevious) <= Math.round(this.drivePower) || Math.signum(this.errorPrevious) != Math.signum(error)) {
-          
-          this.errorPrevious = error;
-
-          if (Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees) {
-            counter += 1;
-          }
-
-          if (counter > 100) {
-            this.m_isFinished = true;
-          }
-      
-          // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
-          if (drivePower < 0) {
-            drivePower *= BalanceConstants.kBalancingControlBackwardsPowerMultiplier;
-          }
-      
-          // Limit the max power
-          if (Math.abs(drivePower) > 0.5) {
-            drivePower = Math.copySign(0.5, drivePower);
-          }
-          
-          // Construct desired chassis speeds
+          calcPID();
           ChassisSpeeds chassisSpeeds;
-          
+
           chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             drivePower, 0, 0, swerveSubsystem.getRotation2d());
-      
           
-          SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-          
-          // Output each module states to wheels
-          this.swerveSubsystem.setModuleStates(moduleStates);
-        }
-        else {
-          this.lockWheels();
-        } 
-        
 
-        SmartDashboard.putNumber("Current Angle: ", currentAngle);
-        SmartDashboard.putNumber("Error ", error);
-        SmartDashboard.putNumber("Drive Power: ", drivePower);
+          SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+            // Output each module states to wheels
+          this.swerveSubsystem.setModuleStates(moduleStates);
+
+
+          SmartDashboard.putNumber("Current Angle: ", currentAngle);
+          SmartDashboard.putNumber("Error ", error);
+          SmartDashboard.putNumber("Drive Power: ", drivePower);
+        }
       }
 
       public void lockWheels(){
@@ -119,8 +105,29 @@ public class BalanceControlCommand extends CommandBase {
         
         this.lockWheels();
         //swerveSubsystem.stopModules();
+      }
 
+      public static double round(double value, int places) {
+        double scale = Math.pow(10, places);
+        return Math.round(value * scale) / scale;
+      }
 
+      public boolean runChecks(){ // Checks if the robot is balanced or starting to balance
+        if (Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees){
+          counter++;
+        } else {
+          counter = 0;
+        }
+        if (counter > 50){
+          m_isFinished = true;
+        }
+
+        if (round(previousError, 4) >= round(error, 4)){
+          return true;
+        }
+        else{
+          return false;
+        }
       }
     
       // Returns true when the command should end.
