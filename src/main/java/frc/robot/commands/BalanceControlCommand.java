@@ -45,38 +45,33 @@ public class BalanceControlCommand extends CommandBase {
       }
       
 
-      // Calc PID Loop speeds
-
-      public void calcPID(){
-        currentAngle = swerveSubsystem.getRoll();
-        error = 0 - currentAngle;
-        drivePower = pidController.calculate(error);
-      }
       // Called every time the scheduler runs while the command is scheduled.
 
       @Override
       public void execute() {
         // Uncomment the line below this to simulate the gyroscope axis with a controller joystick
         // Double currentAngle = -1 * Robot.controller.getRawAxis(Constants.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
-          if (this.runChecks()) {
-
-          calcPID();
+        //  if (this.runChecks()) {
+        
+          this.currentAngle = swerveSubsystem.getRoll();
+          this.error = 0 - currentAngle;
+          this.drivePower = pidController.calculate(error);
           ChassisSpeeds chassisSpeeds;
 
           chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            drivePower, 0, 0, swerveSubsystem.getRotation2d());
+            -drivePower, 0, 0, swerveSubsystem.getRotation2d());
           
 
           SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
             // Output each module states to wheels
           this.swerveSubsystem.setModuleStates(moduleStates);
-
+          counter();
 
           SmartDashboard.putNumber("Current Angle: ", currentAngle);
           SmartDashboard.putNumber("Error ", error);
           SmartDashboard.putNumber("Drive Power: ", drivePower);
-        }
+        //}
       }
 
       public void lockWheels(){
@@ -112,7 +107,7 @@ public class BalanceControlCommand extends CommandBase {
         return Math.round(value * scale) / scale;
       }
 
-      public boolean runChecks(){ // Checks if the robot is balanced or starting to balance
+      public void counter(){ // Checks if the robot is balanced or starting to balance
         if (Math.abs(error) < BalanceConstants.kBalancingControlTresholdDegrees){
           counter++;
         } else {
@@ -120,13 +115,6 @@ public class BalanceControlCommand extends CommandBase {
         }
         if (counter > 50){
           m_isFinished = true;
-        }
-
-        if (round(previousError, 4) >= round(error, 4)){
-          return true;
-        }
-        else{
-          return false;
         }
       }
     
